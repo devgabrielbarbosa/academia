@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - Academia (Local)</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{--accent:#0d6efd}
+    body{background:#f5f7fb;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    .sidebar{height:100vh;background:linear-gradient(180deg,#0b5ed7,#0a58ca);color:#fff}
+    .sidebar a{color:#fff;text-decoration:none}
+    .card-small{min-height:92px}
+    .status-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px}
+    .pointer{cursor:pointer}
+    .small-chart{height:90px}
+    .muted-small{font-size:12px;color:#6c757d}
+    .table-actions button{margin-right:6px}
+    img{max-width:100%;height:auto;border-radius:8px ;  background-color: transparent;
+  mix-blend-mode: multiply;}
+    @media (max-width:991px){.sidebar{height:auto;padding-bottom:20px}}
+    body {
+font-family: Arial, sans-serif;
+background: #f8f9fa;
+margin: 0;
+padding: 0;
+}
+header {
+background: #0d6efd;
+color: white;
+padding: 1rem;
+text-align: center;
+}
+.sidebar button {
+width: 100%;
+margin-bottom: 0.5rem;
+}
+.content {
+padding: 1rem;
+}
+.card-counter {
+border-radius: 10px;
+padding: 20px;
+margin: 10px 0;
+background: #fff;
+box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+text-align: center;
+}
+.chart-container {
+background: #fff;
+padding: 1rem;
+border-radius: 10px;
+box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+margin-top: 1rem;
+}
+@media (max-width: 768px) {
+.sidebar {
+min-height: auto;
+border-right: none;
+border-bottom: 1px solid #ddd;
+}
+}
+
+    *{box-sizing:border-box;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    
+    h1{margin:0 0 6px;font-size:20px;}
+    p.lead{margin:0 0 18px;color:var(--muted);}
+    .app{display:grid;grid-template-columns:340px 1fr;gap:20px;}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.02);}
+    .controls .row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+    label{font-size:13px;color:var(--muted);min-width:120px;}
+    input[type="text"], input[type="date"], input[type="number"], select{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;}
+    button{background:var(--accent);color:#022 top;border:0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;}
+    .small{font-size:12px;color:var(--muted);}
+    .users-list{max-height:44vh;overflow:auto;margin-top:8px;}
+    .user{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.01);}
+    .user b{display:block}
+    .toggles{display:flex;gap:6px;flex-wrap:wrap;}
+    .toggles button{background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;}
+    .toggles button.active{background:rgba(125,211,252,0.12);color:var(--accent);border-color:rgba(125,211,252,0.2);}
+    .main-grid{display:grid;grid-template-columns:1fr 360px;gap:20px;}
+    .clock{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;margin-bottom:12px;}
+    .toasts{position:fixed;right:18px;top:18px;display:flex;flex-direction:column;gap:8px;z-index:9999;}
+    .toast{min-width:280px;padding:12px;border-radius:10px;background:linear-gradient(90deg,#051124, #062033);box-shadow:0 6px 18px rgba(2,6,23,0.6);border-left:6px solid var(--accent);}
+    .toast.success{border-left-color:var(--success)}
+    .toast.warn{border-left-color:#fbbf24}
+    .toast.danger{border-left-color:var(--danger)}
+    .history{max-height:58vh;overflow:auto;padding:8px;border-radius:8px;background:rgba(0,0,0,0.05)}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    @media (max-width:900px){.app{grid-template-columns:1fr;} .main-grid{grid-template-columns:1fr;} .card{padding:10px}}
+    /* helper */
+    .muted{color:var(--muted);font-size:13px}
+    .pill{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);font-size:12px}
+  </style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-lg-2 sidebar p-3 d-flex flex-column gap-3">
+       <a href="./admin.html"><img src="./Imagem do WhatsApp de 2025-10-05 à(s) 23.04.19_566a9439.jpg" alt=""></a>
+         <h4 class="mb-0">Academia Corpo Perfeito</h4>
+      <hr style="border-color:rgba(255,255,255,0.12)"/>
+      <div class="nav flex-column">
+        <a class="nav-link active text-white" href="#" data-target="dashboard">Dashboard</a>
+        <a class="nav-link text-white" href="#" data-target="alunos">Alunos</a>
+        <a class="nav-link text-white" href="#" data-target="agendamentos">Agendamentos</a>
+        <a class="nav-link text-white" href="#" data-target="equipamentos">Equipamentos</a>
+        <a class="nav-link text-white" href="#" data-target="planos">Planos</a>
+        <a class="nav-link text-white" href="#" data-target="notfication">Notificação</a>
+      </div>
+      <div class="mt-auto">
+        <button id="btnReset" class="btn btn-sm btn-outline-light w-100">Resetar dados</button>
+          <button id="btnResetTestData">Restaurar Dados de Teste</button>
+      </div>
+    </nav>
+
+    <main class="col-lg-10 p-4">
+      <!-- Top bar -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 id="pageTitle">Dashboard</h3>
+        <div>
+          <button class="btn btn-primary me-2" id="openAddStudent">Novo aluno</button>
+          <button class="btn btn-outline-secondary" id="openSample">Popular com dados</button>
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <section id="dashboard" class="section-root">
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <div class="card p-3 card-small">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="muted-small">Alunos ativos</div>
+                  <h2 id="countActive">0</h2>
+                </div>
+                <div class="text-end">
+                  <div class="status-dot" style="background:#198754"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card p-3 card-small">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="muted-small">Alunos inativos</div>
+                  <h2 id="countInactive">0</h2>
+                </div>
+                <div>
+                  <div class="status-dot" style="background:#6c757d"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card p-3 card-small">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="muted-small">Pendentes</div>
+                  <h2 id="countPending">0</h2>
+                </div>
+                <div>
+                  <div class="status-dot" style="background:#ffc107"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card p-3 card-small">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="muted-small">Equipamentos</div>
+                  <h2 id="countEquip">0</h2>
+                </div>
+                <div>
+                  <div class="status-dot" style="background:#dc3545"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-lg-8">
+            <div class="card p-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Cadastros por mês (ano do sistema)</h5>
+                <small class="text-muted">Visão: inscrições</small>
+              </div>
+              <canvas id="chartEnrollments" class="small-chart"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card p-3">
+              <h6>Resumo rápido</h6>
+              <div id="quickList" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="alunos" class="d-none section-root">
+        <div class="card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5>Alunos</h5>
+            <div>
+              <button class="btn btn-sm btn-success" id="addStudentBtnTop">Cadastrar aluno</button>
+            </div>
+          </div>
+
+          <div class="mt-3 table-responsive">
+            <!-- Campo de busca -->
+            <div class="search-box mb-3">
+              <label for="searchInput" class="form-label">Buscar aluno:</label>
+              <input type="text" id="searchInput" placeholder="Digite o nome...">
+
+            </div>
+
+            <!-- Tabela de alunos -->
+            <table class="table table-striped table-hover" id="studentsTable">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Telefone</th>
+                  <th>E-mail</th>
+                  <th>Plano</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Alunos serão inseridos aqui via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+<!-- Modal para cadastrar/editar aluno -->
+<div class="modal" tabindex="-1" id="modalStudent">
+  <div class="modal-dialog">
+    <form class="modal-content" id="formStudent">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastrar/Editar Aluno</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="studentId">
+        <div class="mb-2">
+          <label>Nome</label>
+          <input required id="studentName" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label>CPF</label>
+          <input id="studentCPF" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label>Telefone</label>
+          <input id="studentPhone" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label>E-mail</label>
+          <input id="studentEmail" type="email" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label>Plano</label>
+          <select id="studentPlan" class="form-select">
+            <option value="mensal">Mensal</option>
+            <option value="trimestral">Trimestral</option>
+            <option value="anual">Anual</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label>Status</label>
+          <select id="studentStatus" class="form-select">
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+            <option value="pendente">Pendente</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Fechar</button>
+        <button class="btn btn-primary" type="submit">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+      <section id="agendamentos" class="d-none section-root">
+        <div class="card p-3 mb-3">
+          <div class="d-flex justify-content-between">
+            <h5>Agendamentos</h5>
+            <button class="btn btn-sm btn-primary" id="openBooking">Novo agendamento</button>
+          </div>
+          <div class="mt-3">
+            <table class="table" id="bookingsTable">
+              <thead><tr><th>Aluno</th><th>Data</th><th>Aula</th><th>Status</th><th>Ações</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <div class="modal" tabindex="-1" id="modalBooking">
+        <div class="modal-dialog">
+          <form class="modal-content" id="formBooking">
+            <div class="modal-header">
+              <h5 class="modal-title">Agendar aula experimental</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="bookingId">
+              <div class="mb-2">
+                <label>Aluno</label>
+                <input type="text" id="bookingStudent" class="form-control" placeholder="Nome do aluno" required>
+              </div>
+              <div class="mb-2">
+                <label>Data</label>
+                <input id="bookingDate" type="datetime-local" class="form-control" required>
+              </div>
+              <div class="mb-2">
+                <label>Aula</label>
+                <input id="bookingClass" type="text" class="form-control" placeholder="Ex: Musculação" required>
+              </div>
+              <div class="mb-2">
+                <label>Status</label>
+                <select id="bookingStatus" class="form-select">
+                  <option value="agendado">Agendado</option>
+                  <option value="realizado">Realizado</option>
+                  <option value="cancelado">Cancelado</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Fechar</button>
+              <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      
+    <section id="equipamentos" class=" d-none section-root">
+      <div class="card p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Equipamentos</h5>
+          <button class="btn btn-sm btn-secondary" id="openEquip">Cadastrar equipamento</button>
+        </div>
+
+        <div class="mt-3 table-responsive">
+          <table class="table table-striped table-hover" id="equipTable">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Os 40 equipamentos gerados por seedEquipments() serão inseridos aqui via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+      <section id="planos" class="d-none section-root">
+        <div class="card p-3 mb-3">
+          <div class="d-flex justify-content-between">
+            <h5>Planos</h5>
+            <button class="btn btn-sm btn-outline-primary" id="openPlan">Novo plano</button>
+          </div>
+          <div class="mt-3">
+            <table class="table" id="plansTable">
+              <thead><tr><th>Nome</th><th>Duração</th><th>Valor</th><th>Ações</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="notfication" class="d-none section-root">
+ <div class="app">
+    <div class="card controls">
+      <div class="row">
+        <label>Data simulada</label>
+        <input id="simDate" type="text" readonly />
+      </div>
+
+
+  <div class="row">
+    <label>Velocidade (dias / tick)</label>
+    <input id="speed" type="range" min="0" max="30" value="1" />
+    <div class="small" id="speedLabel">1 dia / tick</div>
+  </div>
+
+  <div class="row">
+    <label>Estado</label>
+    <div style="display:flex;gap:8px">
+      <button id="startBtn">Iniciar</button>
+      <button id="pauseBtn">Pausar</button>
+      <button id="advanceBtn">Avançar +1 dia</button>
+    </div>
+  </div>
+
+  <div style="margin-top:8px" class="row">
+    <label>Enviar quando:</label>
+    <div class="toggles" id="toggleGroup">
+      <button data-key="birthday" class="active">Aniversário</button>
+      <button data-key="dueSoon" class="active">Fatura Próxima</button>
+      <button data-key="overdue" class="active">Fatura Atrasada</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <label>Dias antes (fatura próxima)</label>
+    <input id="dueDays" type="number" min="0" value="3" />
+  </div>
+
+  <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0" />
+
+  <div>
+    <strong>Adicionar usuário de teste</strong>
+    <div style="display:grid;gap:8px;margin-top:8px">
+      <input id="name" type="text" placeholder="Nome (ex: João)" />
+      <input id="email" type="text" placeholder="Email (simulado)" />
+      <input id="birthday" type="date" />
+      <input id="dueDate" type="date" />
+      <div style="display:flex;gap:6px">
+        <button id="addUser">Adicionar usuário</button>
+        <button id="addSample">Adicionar exemplos</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <strong>Usuários (simulados)</strong>
+    <div class="users-list" id="usersList"></div>
+  </div>
+
+  <footer>
+    <div class="small">Modo de simulação: nada é realmente enviado — apenas toasts e histórico gravados no seu navegador.</div>
+  </footer>
+</div>
+
+<div class="main-grid">
+  <div class="card">
+    <div class="clock">
+      <div>
+        <div class="small">Relógio simulado</div>
+        <div style="font-weight:700" id="bigClock">—</div>
+        <div class="muted small" id="status">Pausado</div>
+      </div>
+      <div style="text-align:right">
+        <div class="pill" id="nextAction">Próximo disparo: —</div>
+        <div style="height:6px"></div>
+        <div class="small muted">Mensagens enviadas: <span id="sentCount">0</span></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:6px">Histórico de disparos</h3>
+    <div class="history" id="history"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Fila & Testes</h3>
+    <div class="small" style="margin-bottom:8px">Toasts aparecerão no canto superior direito quando um evento for disparado.</div>
+    <div style="display:grid;gap:8px">
+      <button id="clearHistory">Limpar histórico</button>
+      <button id="resetSim">Resetar simulação</button>
+      <div class="small muted">Use "Adicionar exemplos" para popular com dados de teste.</div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Modals (forms) -->
+<div class="modal" tabindex="-1" id="modalStudent">
+  <div class="modal-dialog">
+    <form class="modal-content" id="formStudent">
+      <div class="modal-header"><h5 class="modal-title">Cadastrar/Editar Aluno</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <input type="hidden" id="studentId">
+        <div class="mb-2"><label>Nome</label><input required id="studentName" class="form-control"></div>
+        <div class="mb-2"><label>CPF</label><input id="studentCPF" class="form-control"></div>
+        <div class="mb-2"><label>Telefone</label><input id="studentPhone" class="form-control"></div>
+        <div class="mb-2"><label>E-mail</label><input id="studentEmail" type="email" class="form-control"></div>
+        <div class="mb-2"><label>Plano</label><select id="studentPlan" class="form-select"></select></div>
+        <div class="mb-2"><label>Status</label><select id="studentStatus" class="form-select"><option value="ativo">Ativo</option><option value="inativo">Inativo</option><option value="pendente">Pendente</option></select></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Fechar</button><button class="btn btn-primary" type="submit">Salvar</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modalEquip">
+  <div class="modal-dialog">
+    <form class="modal-content" id="formEquip">
+      <div class="modal-header"><h5 class="modal-title">Cadastrar/Editar Equipamento</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <input type="hidden" id="equipId">
+        <div class="mb-2"><label>Nome</label><input required id="equipName" class="form-control"></div>
+        <div class="mb-2"><label>Descrição</label><input id="equipDesc" class="form-control"></div>
+        <div class="mb-2"><label>Status</label><select id="equipStatus" class="form-select"><option value="operando">Operando</option><option value="manutencao">Em manutenção</option><option value="quebrado">Quebrado</option></select></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Fechar</button><button class="btn btn-primary" type="submit">Salvar</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modalBooking">
+  <div class="modal-dialog">
+    <form class="modal-content" id="formBooking">
+      <div class="modal-header"><h5 class="modal-title">Agendar aula experimental</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <input type="hidden" id="bookingId">
+        <div class="mb-2"><label>Aluno</label><select id="bookingStudent" class="form-select"></select></div>
+        <div class="mb-2"><label>Data</label><input id="bookingDate" type="datetime-local" class="form-control"></div>
+        <div class="mb-2"><label>Aula</label><input id="bookingClass" class="form-control"></div>
+        <div class="mb-2"><label>Status</label><select id="bookingStatus" class="form-select"><option>agendado</option><option>realizado</option><option>cancelado</option></select></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Fechar</button><button class="btn btn-primary" type="submit">Salvar</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modalPlan">
+  <div class="modal-dialog">
+    <form class="modal-content" id="formPlan">
+      <div class="modal-header"><h5 class="modal-title">Cadastrar/Editar Plano</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <input type="hidden" id="planId">
+        <div class="mb-2"><label>Nome</label><input required id="planName" class="form-control"></div>
+        <div class="mb-2"><label>Duração</label><select id="planDuration" class="form-select"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="anual">Anual</option></select></div>
+        <div class="mb-2"><label>Valor (R$)</label><input id="planValue" type="number" step="0.01" class="form-control"></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Fechar</button><button class="btn btn-primary" type="submit">Salvar</button></div>
+    </form>
+  </div>
+</div>
+
+
+
+ 
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>
