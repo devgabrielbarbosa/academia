@@ -1325,6 +1325,9 @@ function renderBookings() {
     tbody.appendChild(tr);
   });
 }
+// Bloqueia os botões
+document.getElementById('btnReset').disabled = true;
+document.getElementById('btnResetTestData').disabled = true;
 
 
 
